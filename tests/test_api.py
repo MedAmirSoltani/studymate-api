@@ -1,4 +1,5 @@
 from fastapi.testclient import TestClient
+from unittest.mock import patch
 from app.main import app
 
 client = TestClient(app)
@@ -19,12 +20,14 @@ def test_ask_empty_question():
 
 def test_ask_valid_question():
     """Test that a valid question returns 200 with expected fields."""
-    response = client.post("/ask", json={"question": "what is machine learning?"})
-    assert response.status_code == 200
-    data = response.json()
-    assert "question" in data
-    assert "answer" in data
-    assert "latency_ms" in data
+    with patch("app.main.retrieve_context", return_value="Machine learning is a subset of AI."), \
+         patch("app.main.ask_llm", return_value="Machine learning is a subset of AI."):
+        response = client.post("/ask", json={"question": "what is machine learning?"})
+        assert response.status_code == 200
+        data = response.json()
+        assert "question" in data
+        assert "answer" in data
+        assert "latency_ms" in data
 
 
 def test_upload_wrong_format():
