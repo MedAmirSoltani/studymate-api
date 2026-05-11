@@ -5,7 +5,7 @@ A production-grade RAG (Retrieval-Augmented Generation) API that lets you upload
 ## Architecture
 
 ```
-User → FastAPI → ChromaDB (retrieval) → Groq LLM (generation) → Response
+User → FastAPI → ChromaDB (retrieval) → LLM (generation) → Response
                       ↓
                 Monitoring layer (latency, tokens, logs)
 ```
